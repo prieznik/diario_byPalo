@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..900;1,62..125,700..900&family=Tinos:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@500;700;800&display=swap">
+<style>
+/* Layout: tabloide argentino de los 90 — tapa con titular catástrofe y foto, barras negras de sección con número de página, nota resumida + recuadro "En las redes" con los tuits */
+:root{
+  --paper:#ECEBE4; --ink:#111110; --ink-2:#34342F; --ink-3:#6E6D64; --box:#DCDBD2; --rev:#ECEBE4;
+  --f-head:"Archivo","Franklin Gothic Medium","Arial Narrow",Arial,sans-serif;
+  --f-body:"Tinos","Times New Roman",Times,serif;
+  --f-label:"Libre Franklin","Franklin Gothic Medium",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#151513;--ink:#ECEBE4;--ink-2:#C9C8BF;--ink-3:#8F8E84;--box:#24241F;--rev:#151513;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#151513;--ink:#ECEBE4;--ink-2:#C9C8BF;--ink-3:#8F8E84;--box:#24241F;--rev:#151513;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:16px;padding-block:0 60px}
+@media(min-width:720px){.wrap{padding-inline:28px}}
+.cond{font-family:var(--f-head);font-stretch:68%;font-weight:900;text-transform:uppercase;letter-spacing:-.005em}
+.label{font-family:var(--f-label);font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* barra de lectura */
+.reader{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ink);color:var(--rev);margin-inline:-16px;padding:7px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 14px}
+@media(min-width:720px){.reader{margin-inline:-28px;padding-inline:28px}}
+.reader b{font-variant-numeric:tabular-nums}
+.reader .meter{flex:1 1 120px;max-width:260px;height:8px;border:1.5px solid var(--rev);position:relative}
+.reader .meter i{position:absolute;inset:0 auto 0 0;width:0;background:var(--rev);transition:width .4s}
+.theme{background:none;border:1.5px solid var(--rev);color:var(--rev);padding:2px 8px;cursor:pointer}
+.theme:focus-visible{outline:2px solid var(--rev);outline-offset:2px}
+
+/* cabezal */
+.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-block:12px 6px;border-bottom:1.5px solid var(--ink)}
+.mast{display:grid;grid-template-columns:1fr;align-items:center;gap:10px;padding-block:6px 4px}
+@media(min-width:760px){.mast{grid-template-columns:150px 1fr 150px}}
+.mast h1{margin:0;text-align:center;font-family:var(--f-head);font-stretch:125%;font-weight:900;font-style:italic;font-size:clamp(70px,16vw,156px);line-height:.88;letter-spacing:-.045em}
+.ear{border:2px solid var(--ink);padding:7px 9px;text-align:center;font-family:var(--f-label);font-size:12px;line-height:1.25}
+.ear b{display:block;font-family:var(--f-head);font-stretch:68%;font-weight:900;font-size:24px;text-transform:uppercase;line-height:1}
+.ears-row{display:flex;gap:10px}
+.ears-row .ear{flex:1}
+@media(min-width:760px){.ears-row{display:contents}}
+.slogan{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 14px;border-top:5px solid var(--ink);border-bottom:1.5px solid var(--ink);padding-block:5px}
+.slogan em{font-family:var(--f-body);font-style:italic;font-size:15px;letter-spacing:0;text-transform:none;font-weight:400}
+
+/* tapa */
+.tapa{display:grid;gap:22px;padding-block:20px;border-bottom:5px solid var(--ink)}
+@media(min-width:900px){.tapa{grid-template-columns:minmax(0,1fr) 290px}}
+.volanta{display:inline-block;font-family:var(--f-label);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.06em;border-bottom:3px solid var(--ink);padding-bottom:2px;margin-bottom:8px}
+.tapa h2{font-size:clamp(46px,8.4vw,98px);line-height:.9;margin:0 0 12px;text-wrap:balance}
+.bajada{font-family:var(--f-body);font-weight:700;font-size:20px;line-height:1.3;margin:0 0 14px}
+.tapa .bajada{font-size:clamp(20px,2.4vw,25px)}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.boxh{background:var(--ink);color:var(--rev);padding:5px 9px}
+.box{border:2px solid var(--ink)}
+.box .in{padding:10px}
+.index li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding-block:7px;border-bottom:1px dotted var(--ink-3)}
+.index li:last-child{border-bottom:0}
+.index a{color:inherit;text-decoration:none;font-family:var(--f-head);font-stretch:68%;font-weight:800;text-transform:uppercase;font-size:20px;line-height:1}
+.index a:hover,.index a:focus-visible{text-decoration:underline}
+.index small{grid-column:1/-1;font-size:14px;font-style:italic;color:var(--ink-2)}
+.index .pg{font-family:var(--f-label);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+ul,ol{list-style:none;margin:0;padding:0}
+.tiempo{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.tiempo div{padding:8px 4px}
+.tiempo div+div{border-left:1px dotted var(--ink-3)}
+.tiempo b{display:block;font-family:var(--f-head);font-stretch:68%;font-weight:900;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}
+.tiempo span{font-family:var(--f-label);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tiempo small{display:block;font-size:13px;font-style:italic;color:var(--ink-2)}
+.trends li{display:flex;justify-content:space-between;gap:8px;padding-block:6px;border-bottom:1px dotted var(--ink-3);font-weight:700;font-size:16px}
+.trends li:last-child{border-bottom:0}
+.trends li small{font-family:var(--f-label);font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* sección */
+.sec{padding-block:26px 4px}
+.secbar{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--ink);color:var(--rev);padding:4px 12px;border-bottom:4px double var(--paper);outline:2px solid var(--ink)}
+.secbar h2{margin:0;font-size:clamp(30px,5vw,42px);line-height:1}
+.secbar .pg{font-family:var(--f-label);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.story{display:grid;gap:18px;padding-block:20px;border-bottom:2px solid var(--ink)}
+.story:last-child{border-bottom:0}
+@media(min-width:880px){.story{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:28px}}
+.story h3{font-size:clamp(32px,4.6vw,50px);line-height:.92;margin:0 0 10px;text-wrap:balance}
+.resumen{margin:0;font-size:17px}
+.resumen::first-letter{font-family:var(--f-head);font-stretch:68%;font-weight:900;float:left;font-size:3.7em;line-height:.8;padding:4px 6px 0 0}
+.ia{display:flex;align-items:center;gap:6px;margin-top:10px;color:var(--ink-3)}
+.ia::before{content:"";width:18px;border-top:1.5px solid currentColor}
+
+/* recuadro de tuits */
+.redes{border:2px solid var(--ink);align-self:start;min-width:0}
+.redes .boxh{display:flex;justify-content:space-between;gap:8px}
+.tw{padding:11px 12px;border-bottom:1px dotted var(--ink-3)}
+.tw:last-child{border-bottom:0}
+.tw .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin-bottom:5px}
+.tag{font-family:var(--f-label);font-weight:800;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid var(--ink);padding:0 5px;line-height:1.5}
+.tag.meme{background:var(--ink);color:var(--rev)}
+.tw .when{font-family:var(--f-label);font-size:11px;color:var(--ink-3)}
+.tw p{margin:0;font-size:16px}
+.tw .who{margin-top:6px;display:flex;justify-content:space-between;gap:4px 10px;flex-wrap:wrap;font-size:14px;font-style:italic}
+.tw .who b{font-style:normal}
+.tw .who a{color:var(--ink-3);text-decoration:none}
+.num{font-family:var(--f-label);font-size:11px;color:var(--ink-3);font-style:normal;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* fotos tramadas */
+.photo{margin:0 0 12px;min-width:0}
+.photo canvas{display:block;width:100%;max-width:100%;aspect-ratio:16/9;border:2px solid var(--ink);background:var(--paper)}
+.photo figcaption{font-family:var(--f-label);font-size:12.5px;line-height:1.35;padding-top:5px;color:var(--ink-2)}
+.photo figcaption b{color:var(--ink)}
+.tw .photo{margin:8px 0 0}
+.tw .photo canvas{aspect-ratio:4/3;border-width:1.5px}
+
+/* humor */
+.memes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding-block:20px}
+.meme-card{border:2px solid var(--ink);min-width:0;display:flex;flex-direction:column}
+.meme-card .photo{margin:0}
+.meme-card .photo canvas{border:0;border-bottom:2px solid var(--ink);aspect-ratio:1/1}
+.meme-card p{margin:0;padding:10px 10px 4px;font-family:var(--f-head);font-stretch:80%;font-weight:800;font-size:19px;line-height:1.12}
+.meme-card .who{padding:0 10px 10px;margin-top:auto;font-size:13.5px;font-style:italic;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.meme-card .who a{color:var(--ink-3);text-decoration:none}
+.stamp{display:inline-grid;place-items:center;width:84px;height:84px;background:var(--ink);color:var(--rev);clip-path:polygon(50% 0,61% 18%,82% 10%,80% 32%,100% 40%,85% 56%,96% 77%,73% 78%,66% 100%,50% 86%,34% 100%,27% 78%,4% 77%,15% 56%,0 40%,20% 32%,18% 10%,39% 18%);transform:rotate(-12deg);font-family:var(--f-head);font-stretch:68%;font-weight:900;font-size:24px;flex:none}
+.humor-head{display:flex;align-items:center;gap:14px;padding-top:16px}
+.humor-head p{margin:0;font-style:italic;color:var(--ink-2);max-width:52ch}
+
+/* sociales */
+.sociales{columns:1;column-gap:28px;column-rule:1px solid var(--ink);padding-block:18px}
+@media(min-width:640px){.sociales{columns:2}}
+@media(min-width:980px){.sociales{columns:3}}
+.soc{break-inside:avoid;padding-bottom:14px;margin-bottom:14px;border-bottom:1px dotted var(--ink-3)}
+.soc h4{margin:0 0 3px;font-family:var(--f-head);font-stretch:68%;font-weight:900;text-transform:uppercase;font-size:20px;line-height:1}
+.soc h4::before{content:"■ ";font-size:.7em;vertical-align:.15em}
+.soc p{margin:0;font-size:16px}
+.soc .num{display:block;margin-top:4px}
+
+/* fin */
+.end{margin-top:30px;border:3px double var(--ink);outline:2px solid var(--ink);outline-offset:4px;text-align:center;padding:30px 18px}
+.end h2{font-size:clamp(40px,7vw,64px);line-height:.9;margin:0 0 10px}
+.end p{margin:0 auto;max-width:46ch;font-style:italic}
+.end .count{margin-top:16px}
+.note{margin-top:30px;text-align:center;color:var(--ink-3)}
+@media (prefers-reduced-motion: reduce){.reader .meter i{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="reader label" role="status">
+    <span>Leíste <b id="read">0</b> de <b>50</b> tuits</span>
+    <span class="meter" aria-hidden="true"><i id="bar"></i></span>
+    <span id="netTxt">Edición guardada · se lee sin conexión</span>
+    <button class="theme label" id="themeBtn" type="button" aria-label="Cambiar entre edición de día y de noche">Noche</button>
+  </div>
+
+  <div class="top label"><span>Año I · Nº 001</span><span>Buenos Aires, martes 13 de octubre de 2026</span><span>Edición de las 20 h</span></div>
+  <header class="mast">
+    <div class="ears-row">
+      <div class="ear"><b>50 tuits</b>Precio del ejemplar</div>
+    </div>
+    <h1>Diario</h1>
+    <div class="ears-row">
+      <div class="ear"><b>24 horas</b>de tu feed, sin scroll infinito</div>
+    </div>
+  </header>
+  <div class="slogan label"><span>Recargo envío al interior: $0</span><em>Lo que pasó en tus redes, en papel</em><span>Cierre de edición: 20:00</span></div>
+
+  <section class="tapa" id="tapa"></section>
+  <main id="secciones"></main>
+
+  <footer class="end">
+    <div class="label">— Cierre —</div>
+    <h2 class="cond">Fin de la edición</h2>
+    <p>Esto fue todo lo que importó en tu feed en las últimas 24 horas. Mañana a las 20 h sale una nueva.</p>
+    <div class="count label" id="next"></div>
+  </footer>
+  <p class="note label">POC con datos de ejemplo · noticias, cuentas y tuits inventados · fotos simuladas en tramado</p>
+</div>
+
+<script>
+/* ---------- datos de ejemplo: así va a ser el JSON que genere el script ---------- */
+// tuit: [tipo, nombre, usuario, horas, texto, likes, reposts, foto?]
+const ED = {
+ tapa:{volanta:"Calor y demanda récord",titulo:"Apagón masivo: medio AMBA quedó a oscuras",
+  bajada:"Más de 700 mil usuarios estuvieron sin luz durante casi tres horas. La distribuidora atribuyó el corte a una falla en una subestación de Palermo.",
+  foto:["street","Vecinos de Palermo en la vereda durante el corte.","@martuledesma"],
+  resumen:"El corte empezó a las 18.40 y afectó a barrios del norte de la Ciudad y a varios partidos del conurbano. Hubo semáforos apagados, demoras en el subte y gente atrapada en ascensores. La luz volvió de a poco desde las 21. El ente regulador pidió un informe a la empresa y anticipó que podría haber multas.",
+  tuits:[
+   ["info","Último Momento AR","ultimomomentoar",3,"La distribuidora confirma una falla en la subestación Palermo. Afecta a más de 700 mil usuarios. Estiman normalizar el servicio en 3 horas.",8200,4100],
+   ["info","Martina Ledesma","martuledesma",3,"Se cortó la luz y la gente salió a la vereda con sillas plegables y mate. Hace años no veía a mis vecinos tanto rato juntos.",18400,2900,"street"],
+   ["meme","El Pibe Fusible","pibefusible",2,"Yo a las 18.41 descubriendo que sin wifi no sé hacer absolutamente nada de mi vida.",22100,5400,"face"],
+   ["meme","Tía Marta","tiamarta_ok",2,"Saqué las velas de la Comunión de 1998. Todavía prenden. No como la distribuidora.",15300,2600],
+   ["opinion","Ignacio Peralta","nachoperalta",1,"Que se corte la luz con 33 grados en octubre no es mala suerte, es falta de inversión. Esto se va a repetir todo el verano.",6100,1500]
+  ]},
+ secciones:[
+  {id:"nacionales",nombre:"Nacionales",pg:2,teaser:"Paro de colectivos y niebla en Rosario",notas:[
+   {volanta:"Transporte",titulo:"Mañana no hay colectivos: qué funciona y qué no",
+    bajada:"El paro arranca a las 0 h en todo el AMBA. Trenes y subtes funcionan con normalidad.",
+    resumen:"Los choferes nucleados en el gremio del sector confirmaron la medida por reclamos salariales. Las líneas de capital y conurbano no van a circular durante 24 horas. Se espera mucha demanda en trenes y subtes desde temprano, y varias empresas habilitaron el trabajo remoto.",
+    tuits:[
+     ["info","Sofía Herrera","sofiherrera",12,"Mañana hay paro de colectivos en el AMBA desde las 0 h. Ya avisaron que los trenes funcionan normal. Organícense.",9800,6200],
+     ["info","Subte Hoy","subtehoy",10,"Las seis líneas y el premetro van a funcionar con frecuencia reforzada en hora pico.",2100,1300],
+     ["meme","Diego Salvatierra","diegosalvatierra",8,"Mi jefe: «mañana venite igual». Yo: preparando la bici que no uso desde 2019.",11200,1500,"bike"]
+    ]},
+   {volanta:"Clima",titulo:"Rosario amaneció bajo una niebla cerrada",
+    bajada:"Hubo demoras en el aeropuerto y en la autopista a Buenos Aires.",
+    resumen:"La visibilidad bajó a menos de 100 metros durante la mañana. Los vuelos se reprogramaron hasta el mediodía y Vialidad pidió manejar con luces bajas. Para el jueves se anuncian lluvias en toda la región.",
+    tuits:[
+     ["meme","Mateo Fernández","mateofernandez",23,"No se veía el Monumento a la Bandera desde la esquina. Parecía Londres con olor a medialuna.",4700,520,"fog"],
+     ["info","Rosario Al Día","rosarioaldia",21,"Aeropuerto de Rosario: vuelos demorados hasta las 12 por niebla. Consulten con su aerolínea.",1300,700],
+     ["info","Pronóstico Litoral","pronolitoral",16,"Jueves y viernes con lluvias y tormentas aisladas en Santa Fe, Entre Ríos y Buenos Aires.",2900,1400]
+    ]}
+  ]},
+  {id:"internacionales",nombre:"Internacionales",pg:4,teaser:"Se cayó la nube y Europa con calor de verano",notas:[
+   {volanta:"Tecnología en el mundo",titulo:"Una falla en la nube dejó sin apps a medio planeta",
+    bajada:"Bancos, aerolíneas y plataformas de streaming estuvieron caídos durante cuatro horas.",
+    resumen:"El problema empezó en un centro de datos de Estados Unidos y se extendió a otras regiones. El proveedor habló de un error en una actualización de configuración. Miles de empresas que dependen de ese servicio quedaron sin poder operar hasta la tarde.",
+    tuits:[
+     ["info","Nico Ferreyra","nicoferreyra_dev",9,"Confirmado: fue un cambio de configuración que se propagó a todas las regiones. Nadie hizo rollback a tiempo. Hilo técnico abajo.",9200,1800],
+     ["meme","Bruno Acosta","brunoacosta",8,"El pasante que tocó producción el viernes a las 17.55, ahora mismo:",14000,3900,"face"],
+     ["opinion","Ana Paula Ríos","anapaularios",7,"Si tu app no anda cuando se cae un solo proveedor, no tenés redundancia. Tenés fe.",4900,1100]
+    ]},
+   {volanta:"Clima",titulo:"Europa vive un octubre con temperaturas de verano",
+    bajada:"España e Italia superaron los 30 grados en pleno otoño.",
+    resumen:"Varias ciudades del sur de Europa registraron máximas récord para la época. Los servicios meteorológicos advirtieron sobre riesgo de incendios y pidieron cuidar a las personas mayores.",
+    tuits:[
+     ["info","Abril Navarro","abrilnavarro",14,"Vivo en Madrid hace tres años y nunca vi a la gente en la playa de un río en octubre. Hoy hizo 31 grados.",2700,380,"river"],
+     ["meme","Federico Luna","fedeluna",13,"Los europeos con 31 grados: emergencia nacional. Nosotros con 31 grados: «está lindo para un asadito».",8900,2100],
+     ["info","Clima Mundial","climamundial",12,"Sevilla marcó 33,4 grados: la máxima más alta para un octubre desde que hay registros.",3400,1700]
+    ]}
+  ]},
+  {id:"economia",nombre:"Economía",pg:6,teaser:"Inflación mayorista y el fin del efectivo",notas:[
+   {volanta:"Precios",titulo:"La inflación mayorista dio por debajo de lo esperado",
+    bajada:"Los analistas piden prudencia: un solo mes no marca una tendencia.",
+    resumen:"El índice de precios mayoristas del último mes se ubicó por debajo del promedio que proyectaban las consultoras. Alimentos y energía fueron los rubros que más subieron.",
+    tuits:[
+     ["opinion","Gastón Medina","gastonmedina_eco",10,"Ojo con leerlo como tendencia: un mes no hace un patrón, tres empiezan a decir algo.",4100,1600],
+     ["meme","Lorena Paz","lorenapaz",9,"«Bajó la inflación». El precio del café con medialunas en mi esquina, que no se enteró:",6600,1200]
+    ]},
+   {volanta:"Pagos",titulo:"Las billeteras virtuales ya le ganan al efectivo",
+    bajada:"En compras chicas, el QR superó a los billetes por primera vez.",
+    resumen:"Según una encuesta del sector, más de la mitad de los pagos de menos de 10 mil pesos ya se hacen con billeteras virtuales. Los kioscos y almacenes son los que más crecieron.",
+    tuits:[
+     ["info","Marcos Villalba","marcosvillalba",3,"El kiosco de la esquina ya tiene QR hasta para el chicle. Y el señor del kiosco me dijo que prefiere eso a dar vuelto.",3100,520],
+     ["meme","Paula Iturbe","pauiturbe",6,"Mi abuelo pagando con QR por primera vez como si estuviera desactivando una bomba.",9300,2000,"face"]
+    ]}
+  ]},
+  {id:"deportes",nombre:"Deportes",pg:8,teaser:"Clásico de infarto y el vóley al Mundial",notas:[
+   {volanta:"Fútbol",titulo:"Clásico de infarto: empate en el minuto 94 con gol del arquero",
+    bajada:"El arquero subió a cabecear el último córner y la metió en el ángulo.",
+    resumen:"El local ganaba 1 a 0 desde el primer tiempo y se defendía con diez. En la última jugada, el arquero visitante fue al área y cabeceó al gol. El estadio quedó en silencio y después estalló la tribuna visitante.",
+    tuits:[
+     ["info","Tomás Rivero","tomirivero",2,"Diez mil personas en silencio y después el estadio entero temblando. Qué partido.",15100,3100,"stadium"],
+     ["meme","Facundo Ríos","facurios",2,"El delantero que erró tres goles mirando cómo el arquero la mete de cabeza:",12400,3300,"face"],
+     ["info","Datos Futboleros","datosfutbol",1,"Es el primer gol de un arquero en un clásico desde 2007.",5300,2200]
+    ]},
+   {volanta:"Vóley",titulo:"Las chicas del vóley vuelven al Mundial después de 12 años",
+    bajada:"La selección femenina ganó 3 a 1 la final del clasificatorio.",
+    resumen:"Argentina se impuso en cuatro sets y aseguró su lugar en el próximo Mundial. Fue la primera clasificación desde 2014 y el equipo tiene un promedio de edad de 23 años.",
+    tuits:[
+     ["info","Flor Quiroga","florquiroga_",4,"Las vi llorar en la cancha y lloré yo en el colectivo.",8900,1700,"court"],
+     ["info","Vóley Argentino","voleyarg",4,"¡ESTAMOS EN EL MUNDIAL! Final: Argentina 3, Colombia 1.",7700,3800],
+     ["meme","Lucas Méndez","lucasmendez",3,"Yo después de ver un partido de vóley: ahora soy experto en rotaciones y bloqueos.",2400,300]
+    ]}
+  ]},
+  {id:"espectaculos",nombre:"Espectáculos",pg:10,teaser:"Recital gratis y adiós a una librería",notas:[
+   {volanta:"Música",titulo:"Recital gratis esta noche en Parque Centenario",
+    bajada:"Tocan cuatro bandas desde las 19. Se recomienda ir en subte.",
+    resumen:"La Ciudad organiza un festival al aire libre con bandas del under porteño. La entrada es libre y no hace falta reservar.",
+    tuits:[
+     ["info","Lara Gutiérrez","laragutierrez",5,"Llevá abrigo porque a las 22 refresca.",2800,960],
+     ["meme","Bianca Molina","biancamolina",4,"Yo diciendo que me quedo en casa y yendo igual al recital:",3200,410]
+    ]},
+   {volanta:"Barrios",titulo:"Cierra una librería histórica después de 38 años",
+    bajada:"El dueño se despidió regalando libros a los chicos del barrio.",
+    resumen:"La librería, ubicada en Villa Crespo, cerró por la suba de alquileres. Vecinos se acercaron a despedirse y dejaron cartas en la vidriera.",
+    tuits:[
+     ["info","Micaela Toledo","micatoledo",9,"El dueño le regaló un libro a cada chico que pasó por la puerta hoy.",12800,2300,"books"],
+     ["opinion","Valentina Ruiz","valeruiz_lee",8,"Cada librería que cierra es un barrio que se apaga un poco. Compren en las de su barrio.",4200,1300]
+    ]}
+  ]},
+  {id:"tecnologia",nombre:"Tecnología",pg:12,teaser:"Agentes de IA en la oficina",notas:[
+   {volanta:"Inteligencia artificial",titulo:"Los agentes de IA ya hacen tareas de oficina",
+    bajada:"Leen mails, resumen contratos y preparan informes. Pero todavía se equivocan.",
+    resumen:"Cada vez más empresas prueban agentes que automatizan tareas repetitivas. Quienes los usan coinciden en que ahorran horas, pero que hay que revisar lo que hacen, sobre todo cuando manejan fechas o números.",
+    tuits:[
+     ["info","Camila Ortiz","camiortiz_ai",9,"Hice un agente que lee mails de proveedores y me arma un resumen de vencimientos. Me ahorra media mañana por semana.",6800,1100],
+     ["opinion","Carla Giménez","carlagimenez",7,"Probé tres editores con IA en el mismo proyecto. Todos sirven, ninguno reemplaza entender qué estás haciendo.",5900,870],
+     ["meme","Leandro Suárez","leasuarez",6,"El agente de IA después de inventar una fecha con total seguridad:",7100,1600,"face"]
+    ]}
+  ]}
+ ],
+ humor:[
+  ["Renata Blanco","renatablanco",5,"Cuando decís «ya voy» pero todavía estás en la ducha.",21000,6100],
+  ["Gonzalo Pereyra","gonzapereyra",7,"Mi perro escuchando que dije «paseo» en una oración que no era para él.",18300,4200],
+  ["Josefina Lamas","jose_lamas",9,"El grupo de WhatsApp de la familia cuando alguien manda «tenemos que hablar».",16400,3900],
+  ["Andrés Molina","andresmolina",11,"Lunes 9 am: «esta semana arranco el gimnasio». Lunes 9.05:",14200,2700],
+  ["Natalia Sosa","natisosa_ux",13,"«No sé qué hace este botón, pero me da miedo apretarlo».",8100,1200],
+  ["Tobías Gil","tobiasgil",15,"Yo explicándole a mi abuela qué es un meme con un meme.",9900,2100],
+  ["Victoria Luna","vickyluna",18,"Las ojeras después de decir «un capítulo más y me duermo».",12700,3300],
+  ["Germán Ibáñez","germanibanez",20,"El asiento del tren que quedó vacío porque todos se lo cedieron a todos.",8800,1000]
+ ],
+ sociales:[
+  ["Lucía Banfi","luciabanfi_pm","Roadmap en tres líneas","El mejor roadmap que escribí tenía tres líneas: qué problema, para quién y cómo sabemos que lo resolvimos.",7600,1400],
+  ["Agustina Paz","aguspaz","La pregunta que funciona","En entrevistas con clientes: «contame la última vez que te pasó». Saca a la gente de la opinión y la lleva al hecho.",5100,980],
+  ["Santiago Paz","santipazz","Datos con decisión","La pregunta más útil en observabilidad sigue siendo: ¿qué decisión vas a tomar con este dato?",3400,640],
+  ["Clara Benedetti","clarabenedetti","De analista a PM","Lo que más me costó no fue la parte técnica. Fue aprender a decir que no sin pedir perdón.",6300,890],
+  ["Julia Vidal","juliavidal","Audio de la abuela","Mi abuela me mandó un audio de seis minutos para decirme que hizo ravioles. Igual voy el domingo.",9700,770],
+  ["Ramiro Benítez","ramabenitez","Primeros 21 km","Corrí mi primer medio maratón. Llegué último de mi grupo y primero en felicidad.",3900,240],
+  ["Martín Lagos","martinlagos","Matar una feature","La usó el 3% de los usuarios y la sacamos. Fue la mejor decisión del trimestre.",4600,720],
+  ["Carolina Funes","carofunes","Fondo de emergencia","Empezar con poco y automatizarlo. No hay más secreto que ese.",3700,1900]
+ ],
+ tendencias:[["Apagón","500 mil+"],["Paro de colectivos","200 mil+"],["Gol del arquero","200 mil+"],["Vóley Mundial","100 mil+"],["Caída de la nube","50 mil+"],["Niebla Rosario","20 mil+"]],
+ tiempo:[["Hoy","33°","Caluroso"],["Mié","28°","Nublado"],["Jue","19°","Lluvias"]]
+};
+
+/* ---------- render ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>n>=1000?(n/1000).toLocaleString("es-AR",{maximumFractionDigits:1})+" mil":String(n);
+const ago=h=>`hace ${h} h`;
+const TAG={info:"Info",meme:"Meme",opinion:"Opinión"};
+let seed=1;
+const canvas=(kind,cls="")=>`<canvas data-seed="${(seed++)*7919}" data-kind="${kind}" class="${cls}" role="img" aria-label="Foto simulada en tramado"></canvas>`;
+const who=(name,user)=>`<span>por <b>${esc(name)}</b> <a href="https://x.com/${user}" target="_blank" rel="noopener">@${user}</a></span>`;
+
+function tweet([tipo,name,user,h,text,likes,rt,img]){
+  return `<div class="tw track"><div class="meta"><span class="tag ${tipo}">${TAG[tipo]}</span><span class="when">${ago(h)}</span></div>
+  <p>${esc(text)}</p>${img?`<figure class="photo">${canvas(img)}</figure>`:""}
+  <div class="who">${who(name,user)}<span class="num">♥ ${fmt(likes)} · ↻ ${fmt(rt)}</span></div></div>`;
+}
+function redes(tuits){ return `<aside class="redes"><div class="boxh label"><span>En las redes</span><span>${tuits.length} tuits</span></div>${tuits.map(tweet).join("")}</aside>`; }
+
+const T=ED.tapa;
+$("#tapa").innerHTML=`<article>
+  <span class="volanta">${esc(T.volanta)}</span>
+  <h2 class="cond">${esc(T.titulo)}</h2>
+  <p class="bajada">${esc(T.bajada)}</p>
+  <figure class="photo">${canvas(T.foto[0])}<figcaption><b>A oscuras.</b> ${esc(T.foto[1])} (Foto: ${esc(T.foto[2])})</figcaption></figure>
+  <div class="story" style="padding-top:6px;border:0">
+    <div><p class="resumen">${esc(T.resumen)}</p><div class="ia label">Resumen armado con ${T.tuits.length} tuits de tu feed</div></div>
+    ${redes(T.tuits)}
+  </div></article>
+  <div class="side">
+    <div class="box"><div class="boxh label">En esta edición</div><ol class="in index">${ED.secciones.map(s=>`<li><a href="#${s.id}">${s.nombre}</a><span class="pg">Pág. ${s.pg}</span><small>${esc(s.teaser)}</small></li>`).join("")}
+      <li><a href="#humor">Humor</a><span class="pg">Pág. 14</span><small>Los memes del día</small></li>
+      <li><a href="#sociales">Sociales</a><span class="pg">Pág. 15</span><small>Lo que publicó tu gente</small></li></ol></div>
+    <div class="box"><div class="boxh label">El tiempo · AMBA</div><div class="tiempo">${ED.tiempo.map(([d,t,c])=>`<div><span>${d}</span><b>${t}</b><small>${c}</small></div>`).join("")}</div></div>
+    <div class="box"><div class="boxh label">Lo que se habla hoy</div><ul class="in trends">${ED.tendencias.map(([t,v])=>`<li>${esc(t)}<small>${v}</small></li>`).join("")}</ul></div>
+  </div>`;
+
+const secs=ED.secciones.map(s=>`<section class="sec" id="${s.id}">
+  <div class="secbar"><h2 class="cond">${s.nombre}</h2><span class="pg">Pág. ${s.pg}</span></div>
+  ${s.notas.map(n=>`<article class="story"><div>
+    <span class="volanta">${esc(n.volanta)}</span><h3 class="cond">${esc(n.titulo)}</h3>
+    <p class="bajada">${esc(n.bajada)}</p><p class="resumen">${esc(n.resumen)}</p>
+    <div class="ia label">Resumen armado con ${n.tuits.length} tuits de tu feed</div></div>${redes(n.tuits)}</article>`).join("")}
+</section>`).join("");
+
+const humor=`<section class="sec" id="humor">
+  <div class="secbar"><h2 class="cond">Humor</h2><span class="pg">Pág. 14</span></div>
+  <div class="humor-head"><span class="stamp" aria-hidden="true">¡JA!</span><p>Los memes que más circularon en tu feed hoy. Sin contexto, como corresponde.</p></div>
+  <div class="memes">${ED.humor.map(([name,user,h,text,likes,rt])=>`<article class="meme-card track"><figure class="photo">${canvas("face")}</figure><p>${esc(text)}</p><div class="who">${who(name,user)}<span class="num">♥ ${fmt(likes)}</span></div></article>`).join("")}</div>
+</section>`;
+
+const sociales=`<section class="sec" id="sociales">
+  <div class="secbar"><h2 class="cond">Sociales</h2><span class="pg">Pág. 15</span></div>
+  <div class="sociales">${ED.sociales.map(([name,user,tit,text,likes,rt])=>`<article class="soc track"><h4>${esc(tit)}</h4><p>${esc(text)}</p><span class="num">${esc(name)} · @${user} · ♥ ${fmt(likes)}</span></article>`).join("")}</div>
+</section>`;
+$("#secciones").innerHTML=secs+humor+sociales;
+
+/* ---------- fotos tramadas (simulan las fotos B/N que bajará el script) ---------- */
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function field(kind,r){
+  const blobs=[...Array(3+Math.floor(r()*4))].map(()=>({x:r(),y:.35+r()*.6,s:.08+r()*.22,d:.4+r()*.6}));
+  const hz=.35+r()*.3, ph=r()*6;
+  return (x,y)=>{
+    let v;
+    if(kind==="face"){ const d=Math.hypot((x-.5)*1.25,y-.48); v=.15+.2*y;
+      if(d<.3)v=.32+.1*Math.sin(x*7+ph); if(Math.hypot(x-.41,y-.42)<.04||Math.hypot(x-.59,y-.42)<.04)v=1;
+      if(Math.abs(y-.6-.06*Math.cos((x-.5)*9))<.018&&Math.abs(x-.5)<.13)v=1; if(y>.8)v=.75; return v; }
+    if(kind==="fog") return (.2+.35*y)*.6+(Math.hypot(x-.5,y-.62)<.08?.4:0)+(Math.abs(x-.5)<.012&&y<.6&&y>.2?.5:0);
+    if(kind==="books"){ const c=Math.floor(x*14); v=.3+((c*37)%10)/14; if((y*3)%1<.06)v=.95; return v; }
+    if(kind==="bike"){ const w1=Math.abs(Math.hypot(x-.3,y-.62)-.16)<.02, w2=Math.abs(Math.hypot(x-.72,y-.62)-.16)<.02; v=.12+.15*y; if(w1||w2)v=1; if(Math.abs(y-.55+.3*(x-.3))<.015&&x>.3&&x<.62)v=1; return v; }
+    if(kind==="stadium"||kind==="court") v=y<hz?.12+.25*(1-y/hz):.5+.3*Math.sin(x*60)*Math.sin(y*30);
+    else if(kind==="river") v=y<hz?.12+.3*(y/hz):.45+.2*Math.sin(y*80+x*6);
+    else v=y<hz?.12+.35*y:.55+.25*(y-hz);
+    for(const b of blobs){const d=Math.hypot((x-b.x)*1.6,y-b.y); if(d<b.s)v=Math.max(v,b.d*(1-d/b.s*.4));}
+    return v;
+  };
+}
+function drawAll(){
+  const ink=getComputedStyle(document.documentElement).getPropertyValue("--ink").trim();
+  document.querySelectorAll("canvas[data-seed]").forEach(c=>{
+    const w=c.clientWidth||400,h=c.clientHeight||260,dpr=Math.min(2,devicePixelRatio||1);
+    c.width=w*dpr;c.height=h*dpr;const g=c.getContext("2d");g.scale(dpr,dpr);g.clearRect(0,0,w,h);g.fillStyle=ink;
+    const f=field(c.dataset.kind,rng(+c.dataset.seed)),s=w>500?6:4.5;
+    for(let y=s/2;y<h;y+=s)for(let x=s/2+((Math.round(y/s))%2)*s/2;x<w;x+=s){
+      const v=Math.min(1,Math.max(0,f(x/w,y/h))),rad=s*.62*Math.sqrt(v);
+      if(rad>.3){g.beginPath();g.arc(x,y,rad,0,6.283);g.fill();}
+    }
+  });
+}
+
+/* ---------- contador de lectura ---------- */
+const items=[...document.querySelectorAll(".track")];
+const seen=new Set();
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){seen.add(e.target);io.unobserve(e.target);}});
+  $("#read").textContent=seen.size;$("#bar").style.width=(seen.size/items.length*100)+"%";
+},{threshold:.6});
+items.forEach(el=>io.observe(el));
+
+/* ---------- conexión, próxima edición, modo noche ---------- */
+function net(){$("#netTxt").textContent=navigator.onLine?"Edición guardada · se lee sin conexión":"Sin conexión · leyendo la edición guardada";}
+addEventListener("online",net);addEventListener("offline",net);net();
+function next(){const now=new Date(),n=new Date(now);n.setHours(20,0,0,0);if(n<=now)n.setDate(n.getDate()+1);
+  const m=Math.round((n-now)/60000);$("#next").textContent=`Próxima edición en ${Math.floor(m/60)} h ${String(m%60).padStart(2,"0")} min`;}
+next();setInterval(next,30000);
+const root=document.documentElement;
+const isDark=()=>root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+const label=()=>{$("#themeBtn").textContent=isDark()?"Día":"Noche";};
+$("#themeBtn").addEventListener("click",()=>{root.dataset.theme=isDark()?"light":"dark";});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{label();drawAll();});
+new MutationObserver(()=>{label();drawAll();}).observe(root,{attributes:true,attributeFilter:["data-theme"]});
+label();
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(drawAll,150)});
+(document.fonts?document.fonts.ready:Promise.resolve()).then(drawAll);drawAll();
+</script>
+</body>
+</html>

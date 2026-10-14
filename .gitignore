@@ -1,0 +1,37 @@
+# --- Secrets: never commit these ---
+.env
+.env.*
+!.env.example
+config.yaml
+*.token
+tokens.json
+secrets/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# --- Pipeline output (local runs) ---
+.cache/
+tmp/
+data/*.tmp
+
+# --- Editors and OS ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,42 @@
+# Diario configuration. Copy to config.yaml and adjust.
+# Every option here is meant to be changed without touching code.
+
+edition:
+  masthead: "Diario"
+  language: "es-AR"
+  timezone: "America/Argentina/Buenos_Aires"
+  publish_time: "20:00"        # local time; the workflow cron must match it in UTC
+  window_hours: 24
+  max_posts: 50
+
+sections:
+  - National
+  - International
+  - Economy
+  - Sports
+  - Entertainment
+  - Tech
+
+sources:
+  x:
+    enabled: true
+    max_posts_per_run: 60      # posts fetched before ranking; drives API cost
+  trends:
+    enabled: true
+    geo: "AR"                  # Google Trends country code
+  weather:
+    enabled: true
+    label: "Buenos Aires"
+    latitude: -34.61
+    longitude: -58.38
+
+ranking:
+  engagement_weight: 0.7
+  recency_weight: 0.3
+
+ai:
+  provider: ""                 # set via LLM_PROVIDER as well
+  model: ""
+
+retention:
+  keep_editions: 7
