@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "edition": {
+    "number": 1,
+    "date": "2026-10-13",
+    "published_at": "2026-10-13T20:00:00-03:00",
+    "window": {
+      "from": "2026-10-12T20:00:00-03:00",
+      "to": "2026-10-13T20:00:00-03:00"
+    },
+    "masthead": "Diario",
+    "language": "es-AR",
+    "post_count": 8
+  },
+  "posts": [
+    {
+      "id": "x_1001",
+      "type": "info",
+      "author": { "name": "Último Momento AR", "handle": "ultimomomentoar" },
+      "posted_at": "2026-10-13T18:55:00-03:00",
+      "text": "La distribuidora confirma una falla en la subestación Palermo. Afecta a más de 700 mil usuarios.",
+      "metrics": { "likes": 8200, "reposts": 4100 },
+      "image": null,
+      "url": "https://x.com/ultimomomentoar/status/1001"
+    },
+    {
+      "id": "x_1002",
+      "type": "info",
+      "author": { "name": "Martina Ledesma", "handle": "martuledesma" },
+      "posted_at": "2026-10-13T19:02:00-03:00",
+      "text": "Se cortó la luz y la gente salió a la vereda con sillas plegables y mate.",
+      "metrics": { "likes": 18400, "reposts": 2900 },
+      "image": {
+        "src": "images/2026-10-13/x_1002.webp",
+        "alt": "Vecinos sentados en la vereda durante el corte de luz"
+      },
+      "url": "https://x.com/martuledesma/status/1002"
+    },
+    {
+      "id": "x_1003",
+      "type": "meme",
+      "author": { "name": "El Pibe Fusible", "handle": "pibefusible" },
+      "posted_at": "2026-10-13T18:41:00-03:00",
+      "text": "Yo a las 18.41 descubriendo que sin wifi no sé hacer nada de mi vida.",
+      "metrics": { "likes": 22100, "reposts": 5400 },
+      "image": null,
+      "url": "https://x.com/pibefusible/status/1003"
+    },
+    {
+      "id": "x_1004",
+      "type": "info",
+      "author": { "name": "Sofía Herrera", "handle": "sofiherrera" },
+      "posted_at": "2026-10-13T08:10:00-03:00",
+      "text": "Mañana hay paro de colectivos en el AMBA desde las 0 h. Los trenes funcionan normal.",
+      "metrics": { "likes": 9800, "reposts": 6200 },
+      "image": null,
+      "url": "https://x.com/sofiherrera/status/1004"
+    },
+    {
+      "id": "x_1005",
+      "type": "meme",
+      "author": { "name": "Diego Salvatierra", "handle": "diegosalvatierra" },
+      "posted_at": "2026-10-13T12:30:00-03:00",
+      "text": "Mi jefe: «mañana venite igual». Yo: preparando la bici que no uso desde 2019.",
+      "metrics": { "likes": 11200, "reposts": 1500 },
+      "image": null,
+      "url": "https://x.com/diegosalvatierra/status/1005"
+    },
+    {
+      "id": "x_1006",
+      "type": "meme",
+      "author": { "name": "Renata Blanco", "handle": "renatablanco" },
+      "posted_at": "2026-10-13T15:00:00-03:00",
+      "text": "Cuando decís «ya voy» pero todavía estás en la ducha.",
+      "metrics": { "likes": 21000, "reposts": 6100 },
+      "image": {
+        "src": "images/2026-10-13/x_1006.webp",
+        "alt": "Persona con cara de sorpresa"
+      },
+      "url": "https://x.com/renatablanco/status/1006"
+    },
+    {
+      "id": "x_1007",
+      "type": "meme",
+      "author": { "name": "Gonzalo Pereyra", "handle": "gonzapereyra" },
+      "posted_at": "2026-10-13T13:00:00-03:00",
+      "text": "Mi perro escuchando que dije «paseo» en una oración que no era para él.",
+      "metrics": { "likes": 18300, "reposts": 4200 },
+      "image": null,
+      "url": "https://x.com/gonzapereyra/status/1007"
+    },
+    {
+      "id": "x_1008",
+      "type": "opinion",
+      "author": { "name": "Lucía Banfi", "handle": "luciabanfi_pm" },
+      "posted_at": "2026-10-13T11:20:00-03:00",
+      "text": "El mejor roadmap que escribí tenía tres líneas: qué problema, para quién y cómo sabemos que lo resolvimos.",
+      "metrics": { "likes": 7600, "reposts": 1400 },
+      "image": null,
+      "url": "https://x.com/luciabanfi_pm/status/1008"
+    }
+  ],
+  "front_page": {
+    "story": {
+      "id": "blackout",
+      "kicker": "Calor y demanda récord",
+      "headline": "Apagón masivo: medio AMBA quedó a oscuras",
+      "deck": "Más de 700 mil usuarios estuvieron sin luz durante casi tres horas.",
+      "summary": "El corte empezó a las 18.40 y afectó a barrios del norte de la Ciudad y a varios partidos del conurbano. La luz volvió de a poco desde las 21.",
+      "post_ids": ["x_1001", "x_1002", "x_1003"],
+      "lead_image": {
+        "post_id": "x_1002",
+        "caption": "Vecinos de Palermo en la vereda durante el corte."
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "national",
+      "name": "Nacionales",
+      "page": 2,
+      "teaser": "Paro de colectivos",
+      "stories": [
+        {
+          "id": "bus-strike",
+          "kicker": "Transporte",
+          "headline": "Mañana no hay colectivos: qué funciona y qué no",
+          "deck": "El paro arranca a las 0 h en todo el AMBA.",
+          "summary": "Las líneas de la Ciudad y del conurbano no van a circular durante 24 horas. Trenes y subtes funcionan con normalidad.",
+          "post_ids": ["x_1004", "x_1005"],
+          "lead_image": null
+        }
+      ]
+    }
+  ],
+  "humor": {
+    "page": 14,
+    "post_ids": ["x_1006", "x_1007"]
+  },
+  "social": {
+    "page": 15,
+    "items": [
+      { "title": "Roadmap en tres líneas", "post_id": "x_1008" }
+    ]
+  },
+  "trending": [
+    { "term": "Apagón", "traffic": "500 mil+" },
+    { "term": "Paro de colectivos", "traffic": "200 mil+" }
+  ],
+  "weather": {
+    "location": "Buenos Aires",
+    "days": [
+      { "label": "Hoy", "date": "2026-10-13", "max_c": 33, "summary": "Caluroso" },
+      { "label": "Mié", "date": "2026-10-14", "max_c": 28, "summary": "Nublado" },
+      { "label": "Jue", "date": "2026-10-15", "max_c": 19, "summary": "Lluvias" }
+    ]
+  }
+}
