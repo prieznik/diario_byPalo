@@ -1,0 +1,37 @@
+name: Set project status
+
+# Manually triggered (Actions tab or API). Only people with write access to the
+# repository can run it, so the PROJECT_TOKEN secret is never exposed to forks
+# or pull requests.
+on:
+  workflow_dispatch:
+    inputs:
+      issues:
+        description: "Issue numbers, comma-separated (e.g. 1, 9, 18)"
+        required: true
+      status:
+        description: "Status to set (e.g. Ready, In progress, Done)"
+        required: true
+        default: "Ready"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-status
+  cancel-in-progress: false
+
+jobs:
+  set-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update Status on the project board
+        env:
+          PROJECT_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_OWNER: ${{ github.repository_owner }}
+          PROJECT_NUMBER: "2"
+          REPO: ${{ github.repository }}
+          ISSUES: ${{ inputs.issues }}
+          STATUS: ${{ inputs.status }}
+        run: python3 .github/scripts/set_project_status.py
